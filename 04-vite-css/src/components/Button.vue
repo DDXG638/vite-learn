@@ -18,10 +18,12 @@ defineProps<{
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  -webkit-transition: all 0.2s;
 }
 
 .btn:hover {
   transform: scale(1.05);
+  -webkit-transform: scale(1.05);
 }
 
 .btn-default {

@@ -10,7 +10,7 @@ defineProps<{
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .btn {
   padding: 0.5rem 1rem;
   margin-right: 0.5rem;
@@ -18,12 +18,27 @@ defineProps<{
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  -webkit-transition: all 0.2s;
+
+  /* 测试 Autoprefixer 专用 CSS */
+  .test-transform {
+    transform: rotate(30deg);
+  }
+  .test-user-select {
+    user-select: none;
+  }
+  .test-backdrop {
+    backdrop-filter: blur(8px);
+  }
+  .test-appearance {
+    appearance: none;
+  }
+  .test-scroll {
+    scroll-snap-type: y mandatory;
+  }
 }
 
 .btn:hover {
   transform: scale(1.05);
-  -webkit-transform: scale(1.05);
 }
 
 .btn-default {

@@ -32,6 +32,12 @@ pnpm build
 
 ### PostCSS 配置
 
+vite 内置了 PostCSS，所以项目不需要安装 PostCSS 的依赖。
+
+PostCSS 的插件的依赖需要安装，比如 autoprefixer 插件。
+
+Autoprefixer 依赖 browserslist 决定兼容范围，如果不配置，会默认兼容最新浏览器，不会加前缀！
+
 ```javascript
 // postcss.config.js
 export default {
@@ -43,7 +49,7 @@ export default {
 
 ### SCSS 配置
 
-Vite 内置支持 SCSS，无需额外配置。
+Vite 内置支持 SCSS，无需额外配置。但是需要安装sass依赖，推荐安装 sass-embedded 依赖。
 
 ## 知识点
 

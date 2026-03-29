@@ -1,0 +1,21 @@
+{
+  "name": "01-vite-basics",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "sass": "^1.83.4",
+    "typescript": "~5.7.3",
+    "vite": "^7.0.5",
+    "vue-tsc": "^2.2.0"
+  }
+}

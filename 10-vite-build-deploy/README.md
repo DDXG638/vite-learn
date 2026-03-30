@@ -85,8 +85,8 @@ pnpm build:analyze
 
 ### 4. 部署注意事项
 
-- 构建产物在 dist 目录
-- 需要 Web 服务器支持 ESM
+- 构建产物在 dist 目录(base可配置cdn域名)
+- 需要 Web 服务器支持 ESM(js文件的content-type需设置为appliation/javascript)
 - SPA 需要配置 fallback
 
 ## 思考题

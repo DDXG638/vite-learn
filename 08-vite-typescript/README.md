@@ -96,6 +96,15 @@ export interface User {
 
 用于生产构建前的类型检查。
 
+| 工具 | 说明 |
+|------|------|
+| tsc | TypeScript 官方编译器，只处理 `.ts` 文件 |
+| vue-tsc | 基于 tsc，额外支持 `.vue` 文件类型检查 |
+
+#### 核心区别
+
+**tsc** 无法解析 `.vue` 文件：
+
 ## 思考题
 
 1. tsconfig.json 中 "moduleResolution" 的作用是什么？

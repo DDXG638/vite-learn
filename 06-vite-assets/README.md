@@ -2,7 +2,7 @@
 
 ## 本章概述
 
-本章将学习 Vite 的静态资源处理机制，包括 public 目录、导入图片/视频/字体、base64 内联以及资源路径处理。
+本章将学习 Vite 的静态资源处理机制，包括 public 目录、导入图片/视频/字体、base64 内联以及资源路径处理。更多查看：https://cn.vite.dev/guide/features#static-assets
 
 ## 依赖包说明
 

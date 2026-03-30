@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import { chunk } from 'lodash-es'
+
+const cardComp = defineAsyncComponent(() => import('./components/Card.vue'))
+const buttonComp = defineAsyncComponent(() => import('./components/Button.vue'))
 
 const message = ref('Vite 代码分割演示')
 const chunkInfo = ref('')
@@ -16,6 +19,8 @@ onMounted(() => {
   <div class="container">
     <h1>{{ message }}</h1>
     <p>{{ chunkInfo }}</p>
+    <card-comp />
+    <button-comp />
   </div>
 </template>
 

@@ -71,7 +71,9 @@ manualChunks: {
 
 ### 2. 动态导入
 
-动态 `import()` 会自动分割代码：
+动态 `import()` 会自动分割代码, 就js和css单独提取
+
+Vite 会为入口 chunk 和它们在打包出的 HTML 中的直接引入自动生成 "<link rel="modulepreload">"指令。
 
 ```typescript
 // 按需加载
@@ -80,7 +82,7 @@ const Component = defineAsyncComponent(() => import('./Component.vue'))
 
 ### 3. 预构建依赖
 
-`optimizeDeps` 用于预构建依赖：
+`optimizeDeps` 用于预构建依赖：node_modules中的依赖默认会进行依赖预构建，不需要显式指定。
 
 ```typescript
 optimizeDeps: {

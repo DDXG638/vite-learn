@@ -103,9 +103,75 @@ async function createServer() {
   // 使用 Vite 的中间件处理静态资源和 HMR
   app.use(vite.middlewares)
 
-  // SSR 渲染路由
-  app.use('*', async (req, res, next) => {
+  // SSR 流式渲染路由
+  app.use('/stream', async (req, res, next) => {
     const url = req.originalUrl
+
+    console.log('流式渲染')
+
+    try {
+      // 1. 读取 index.html
+      let template = fs.readFileSync(
+        path.resolve(__dirname, '../index.html'),
+        'utf-8',
+      )
+      template = await vite.transformIndexHtml(url, template)
+
+      // 2. 加载服务端入口模块
+      const { createApp } = await vite.ssrLoadModule('/src/server/entry-server.ts')
+
+      // 3. 创建 SSR 应用
+      const { app: appInstance } = createApp()
+
+      // 4. 流式渲染
+      const { renderToNodeStream } = await import('vue/server-renderer')
+
+      // 设置响应头
+      res.status(200).set({
+        'Content-Type': 'text/html',
+        'Transfer-Encoding': 'chunked'
+      })
+
+      // 拆分 HTML 为开始部分和结束部分
+      const htmlStart = template.split('<!--app-html-->')[0]
+      const htmlEnd = template.split('<!--app-html-->')[1]
+
+      // 发送 HTML 开始部分
+      res.write(htmlStart)
+
+      // 创建流并 pipe 到响应
+      const stream = renderToNodeStream(appInstance)
+
+      stream.on('data', (chunk) => {
+        res.write(chunk.toString())
+      })
+
+      stream.on('end', () => {
+        res.write(htmlEnd)
+        res.end()
+      })
+
+      stream.on('error', (err) => {
+        console.error('Stream error:', err)
+        res.status(500).end('Stream error')
+      })
+    } catch (e) {
+      vite.ssrFixStacktrace(e)
+      next(e)
+    }
+  })
+
+  // SSR 渲染路由（普通模式）- 放在 /stream 之后
+  // 需要确保 /stream 不匹配到 /
+  app.use('/', async (req, res, next) => {
+    const url = req.originalUrl
+
+    // 跳过 /stream 路由
+    if (url === '/stream') {
+      return next()
+    }
+
+    console.log('普通模式')
 
     try {
       // 1. 读取 index.html
@@ -125,21 +191,11 @@ async function createServer() {
       const { renderToString } = await import('vue/server-renderer')
       const appHtml = await renderToString(appInstance)
 
-      // 5. 收集并内联 CSS（带调试日志）
-      // console.log('=== 开始收集 CSS ===')
-      // const cssContent = await collectInlineCSS(vite, '/src/client/main.ts')
-      // console.log('=== 收集到的 CSS 长度:', cssContent.length, '===')
-      // const cssHtml = cssContent ? `<style>${cssContent}</style>\n` : ''
-
-      // 6. 移除外部 CSS link 并注入内联 CSS 和 HTML
-      // template = template.replace(/<link[^>]*rel="stylesheet"[^>]*>/g, '')
-      const html = template
-        .replace('<!--app-html-->', appHtml)
-        // .replace('</head>', `${cssHtml}</head>`)
+      // 5. 注入渲染结果到 HTML
+      const html = template.replace('<!--app-html-->', appHtml)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
-      // 如果发生错误，调用 Vite 的错误中间件来清理错误并发送回正确的 HTTP 状态码
       vite.ssrFixStacktrace(e)
       next(e)
     }
@@ -147,6 +203,8 @@ async function createServer() {
 
   app.listen(3000, () => {
     console.log('SSR Dev Server: http://localhost:3000')
+    console.log('  - 普通模式: http://localhost:3000/')
+    console.log('  - 流式渲染: http://localhost:3000/stream')
   })
 }
 

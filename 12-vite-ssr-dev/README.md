@@ -59,6 +59,8 @@ export default defineConfig({
 
 ### server/index.js
 
+[参考：ssr-vue](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/src/entry-server.js)
+
 ```javascript
 import express from 'express'
 import { createServer as createViteServer } from 'vite'

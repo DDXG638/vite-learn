@@ -39,7 +39,7 @@ async function createServer() {
 
     try {
       // 1. 读取 index.html 模板
-      const templatePath = resolve(serverDist, 'index.html')
+      const templatePath = resolve(clientDist, 'index.html')
       let template = readFileSync(templatePath, 'utf-8')
 
       // 2. 加载服务端 bundle

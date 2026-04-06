@@ -9,7 +9,7 @@
     "build:ssr": "vite build --ssr src/entry-server.ts --outDir dist/server",
     "preview": "vite preview",
     "ssr:dev": "node server/dev.mjs",
-    "ssr:build": "npm run build && npm run build:ssr && cp dist/index.html dist/server/",
+    "ssr:build": "pnpm run build && pnpm run build:ssr",
     "ssr:start": "node server/prod.mjs",
     "clean": "rm -rf dist"
   },

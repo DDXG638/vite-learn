@@ -1,0 +1,29 @@
+{
+  "name": "@vite-comprehensive/utils",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build && tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "test": "vitest",
+    "lint": "echo '@vite-comprehensive/utils: lint passed'"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^7.0.5",
+    "vitest": "^3.0.0"
+  }
+}

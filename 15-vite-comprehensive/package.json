@@ -1,0 +1,26 @@
+{
+  "name": "vite-comprehensive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vite 综合实战学习示例",
+  "scripts": {
+    "dev": "pnpm --filter @vite-comprehensive/app ssr:dev",
+    "build": "pnpm -r build",
+    "build:app": "pnpm --filter @vite-comprehensive/app build",
+    "build:components": "pnpm --filter @vite-comprehensive/components build",
+    "build:utils": "pnpm --filter @vite-comprehensive/utils build",
+    "preview": "pnpm --filter @vite-comprehensive/app preview",
+    "clean": "pnpm -r clean",
+    "test": "pnpm -r test",
+    "test:components": "pnpm --filter @vite-comprehensive/components test",
+    "test:utils": "pnpm --filter @vite-comprehensive/utils test",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

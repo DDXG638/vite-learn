@@ -1,0 +1,35 @@
+{
+  "name": "@vite-comprehensive/app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:ssr": "vite build --ssr src/entry-server.ts --outDir dist/server",
+    "preview": "vite preview",
+    "ssr:dev": "node server/dev.mjs",
+    "ssr:build": "npm run build && npm run build:ssr && cp dist/index.html dist/server/",
+    "ssr:start": "node server/prod.mjs",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@vite-comprehensive/components": "workspace:*",
+    "@vite-comprehensive/utils": "workspace:*",
+    "compression": "^1.7.4",
+    "pinia": "^3.0.0",
+    "sirv": "^2.0.4",
+    "vue": "^3.5.13",
+    "vue-router": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^25.5.2",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "express": "^5.0.0",
+    "sass-embedded": "^1.99.0",
+    "typescript": "^5.7.3",
+    "vite": "^7.0.5",
+    "vue-tsc": "^2.2.0"
+  }
+}

@@ -10,7 +10,6 @@ export default defineConfig({
       name: 'Components',
       formats: ['es'],
       fileName: 'index'
-    },
-    emptyOutDir: false
+    }
   }
 })

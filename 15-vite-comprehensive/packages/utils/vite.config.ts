@@ -8,7 +8,6 @@ export default defineConfig({
       name: 'Utils',
       formats: ['es'],
       fileName: 'index'
-    },
-    emptyOutDir: false
+    }
   }
 })

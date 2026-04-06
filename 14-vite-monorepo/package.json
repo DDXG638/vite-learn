@@ -10,9 +10,11 @@
     "build:shared": "pnpm --filter @vite-monorepo/shared build",
     "build:utils": "pnpm --filter @vite-monorepo/utils build",
     "clean": "pnpm -r clean",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "typescript": "^5.7.3"
   },
   "engines": {

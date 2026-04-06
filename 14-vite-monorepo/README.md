@@ -322,6 +322,108 @@ pnpm --filter @vite-monorepo/shared build
 pnpm --filter @vite-monorepo/app build
 ```
 
+#### 使用 Changesets 管理发布
+
+本项目使用 [changesets](https://github.com/changesets/changesets) 管理版本和发布。
+
+##### 安装和初始化
+
+```bash
+# 安装 changesets
+pnpm add -Dw @changesets/cli
+
+# 初始化
+pnpm changeset init
+```
+
+##### changesets 配置
+
+```json
+// .changeset/config.json
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.3/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
+```
+
+##### 常用命令
+
+```bash
+# 创建 changeset 文件（描述变更）
+pnpm changeset
+# 选择要发布的包和版本类型 (patch/minor/major)
+
+# 查看将要进行的版本更新
+pnpm changeset status
+
+# 根据 changeset 文件更新版本号
+pnpm changeset version
+# 会自动：
+# 1. 更新被修改包的版本
+# 2. 更新依赖该包的内部依赖版本
+# 3. 生成 CHANGELOG.md
+
+# 发布到 npm
+pnpm release
+```
+
+##### changeset 文件格式
+
+```markdown
+# .changeset/add-function.md
+---
+"@vite-monorepo/utils": minor
+"@vite-monorepo/shared": patch
+---
+
+utils 包新增 subtract 减法函数
+shared 包修复 Button 组件样式问题
+```
+
+版本类型说明：
+- **patch**: 补丁版本 (1.0.0 → 1.0.1) - 修复bug
+- **minor**: 次版本 (1.0.0 → 1.1.0) - 新功能
+- **major**: 主版本 (1.0.0 → 2.0.0) - 破坏性变更
+
+##### 发布流程演示
+
+```bash
+# 1. 修改代码后，创建 changeset
+pnpm changeset
+# 选择 @vite-monorepo/utils，minor
+
+# 2. 查看状态
+pnpm changeset status
+
+# 3. 执行版本更新
+pnpm changeset version
+# 结果：
+# - @vite-monorepo/utils: 1.0.0 → 1.1.0
+# - @vite-monorepo/app: 1.0.0 → 1.0.1 (因依赖 utils 自动更新)
+# - @vite-monorepo/shared: 1.0.0 (无变更)
+
+# 4. 构建并发布
+pnpm build
+pnpm release
+```
+
+##### 版本更新规则
+
+`updateInternalDependencies` 配置影响内部依赖版本更新策略：
+
+| 配置值 | 场景 | 示例 |
+|-------|------|------|
+| "patch" | 依赖包有更新 | utils: 1.0.0 → 1.1.0，app: 1.0.0 → 1.0.1 |
+| "minor" | 仅 major 更新时 | utils: 1.0.0 → 2.0.0，app: 1.0.0 → 1.1.0 |
+| "never" | 从不自动更新 | utils: 1.0.0 → 2.0.0，app: 1.0.0 (不变) |
+
 #### 发布配置
 
 ```json

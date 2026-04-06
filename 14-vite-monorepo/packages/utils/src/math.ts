@@ -25,3 +25,10 @@ export function clamp(value: number, min: number, max: number): number {
 export function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
+
+/**
+ * 减法运算 (新增)
+ */
+export function subtract(a: number, b: number): number {
+  return a - b
+}

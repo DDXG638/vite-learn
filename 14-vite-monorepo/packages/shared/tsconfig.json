@@ -1,12 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/types",
     "outDir": "./dist",
-    "emitDeclarationOnly": true,
-    "types": ["node"]
+    "rootDir": "./src",
+    "emitDeclarationOnly": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

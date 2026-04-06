@@ -1,0 +1,22 @@
+{
+  "name": "vite-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vite Monorepo 学习示例",
+  "scripts": {
+    "dev": "pnpm --filter @vite-monorepo/app dev",
+    "build": "pnpm -r build",
+    "build:app": "pnpm --filter @vite-monorepo/app build",
+    "build:shared": "pnpm --filter @vite-monorepo/shared build",
+    "build:utils": "pnpm --filter @vite-monorepo/utils build",
+    "clean": "pnpm -r clean",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

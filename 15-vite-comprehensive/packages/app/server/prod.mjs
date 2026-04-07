@@ -44,15 +44,30 @@ async function createServer() {
 
       // 2. 加载服务端 bundle
       const entryServerPath = pathToFileURL(resolve(serverDist, 'entry-server.js')).href
-      const { createApp } = await import(entryServerPath)
+      const { createApp, fetchSsrData } = await import(entryServerPath)
 
-      // 3. 渲染应用
-      const { app: appInstance } = createApp()
+      // 3. 创建 app 实例
+      const { app: appInstance, pinia, router } = createApp()
+
+      // 4. 路由跳转并等待完成
+      const path = url.slice(BASE.length) || '/'
+      await router.push(path)
+      await router.isReady()
+
+      // 5. 预取 SSR 数据（路由导航完成后根据路由预取）
+      const ssrState = await fetchSsrData(pinia, router)
+
+      // 6. 渲染
       const { renderToString } = await import('vue/server-renderer')
       const appHtml = await renderToString(appInstance)
 
-      // 4. 注入 HTML
-      const html = template.replace('<!--app-html-->', appHtml)
+      // 7. 注入 state 到 HTML
+      const stateScript = `<script id="ssr-state" type="application/json">${JSON.stringify(ssrState)}</script>`
+
+      // 5. 注入 HTML
+      const html = template
+        .replace('<!--app-html-->', appHtml)
+        .replace('</body>', `${stateScript}</body>`)
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
       console.error(e)

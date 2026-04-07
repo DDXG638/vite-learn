@@ -14,7 +14,7 @@
         <LazyImage
           :src="product.image"
           :alt="product.name"
-          :first-screen="index < 2"
+          :first-screen="index < 6"
           aspect-ratio="1:1"
         />
         <div class="product-card__info">
@@ -36,7 +36,10 @@ import { formatPrice } from '@vite-comprehensive/utils'
 const productStore = useProductStore()
 
 onMounted(() => {
-  productStore.fetchProducts()
+  // 只有在数据为空时才请求（避免 SSR 场景下重复请求）
+  if (productStore.products.length === 0) {
+    productStore.fetchProducts()
+  }
 })
 </script>
 

@@ -2,24 +2,24 @@
   <div class="product-detail">
     <router-link to="/" class="product-detail__back">&larr; 返回列表</router-link>
 
-    <div v-if="productStore.loading" class="product-detail__loading">
+    <div v-if="loading && !product" class="product-detail__loading">
       加载中...
     </div>
-    <div v-else-if="productStore.currentProduct" class="product-detail__content">
+    <div v-else-if="product" class="product-detail__content">
       <div class="product-detail__image">
         <LazyImage
-          :src="productStore.currentProduct.image"
-          :alt="productStore.currentProduct.name"
+          :src="product.image"
+          :alt="product.name"
           :first-screen="true"
           aspect-ratio="1:1"
         />
       </div>
       <div class="product-detail__info">
-        <h1 class="product-detail__name">{{ productStore.currentProduct.name }}</h1>
-        <p class="product-detail__category">{{ productStore.currentProduct.category }}</p>
-        <p class="product-detail__price">{{ formatPrice(productStore.currentProduct.price) }}</p>
-        <p class="product-detail__description">{{ productStore.currentProduct.description }}</p>
-        <p class="product-detail__stock">库存: {{ productStore.currentProduct.stock }}</p>
+        <h1 class="product-detail__name">{{ product.name }}</h1>
+        <p class="product-detail__category">{{ product.category }}</p>
+        <p class="product-detail__price">{{ formatPrice(product.price) }}</p>
+        <p class="product-detail__description">{{ product.description }}</p>
+        <p class="product-detail__stock">库存: {{ product.stock }}</p>
         <button class="product-detail__buy">立即购买</button>
       </div>
     </div>
@@ -30,19 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useProductStore } from '../stores/product'
 import { LazyImage } from '@vite-comprehensive/components'
 import { formatPrice } from '@vite-comprehensive/utils'
+import { useSsrProduct } from '../composables/useSsrProduct'
 
-const route = useRoute()
-const productStore = useProductStore()
-
-onMounted(() => {
-  const id = route.params.id as string
-  productStore.fetchProduct(id)
-})
+const { product, loading } = useSsrProduct()
 </script>
 
 <style scoped lang="scss">

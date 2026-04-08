@@ -10,6 +10,9 @@ export default defineConfig({
       name: 'Components',
       formats: ['es'],
       fileName: 'index'
+    },
+    rollupOptions: {
+      external: ['vue']
     }
   }
 })

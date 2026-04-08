@@ -167,6 +167,52 @@ dist/assets/ProductDetail-xxx.js 1.50 kB (按需加载)
 - 生产构建：`npm run ssr:build`
 - 生产服务器：`node server/prod.mjs`
 
+### 7. Changesets 版本管理
+
+本项目使用 [changesets](https://github.com/changesets/changesets) 管理 Monorepo 包版本和发布。
+
+#### 配置说明
+
+```json
+// .changeset/config.json
+{
+  "fixed": [["@vite-comprehensive/components", "@vite-comprehensive/utils"]],
+  "ignore": ["@vite-comprehensive/app"],
+  "access": "public"
+}
+```
+
+#### 常用配置字段
+
+| 字段 | 说明 | 示例 |
+|------|------|------|
+| `fixed` | 固定版本组，同组永远同版本 | `[["pkg-a", "pkg-b"]]` |
+| `linked` | 关联版本，但可独立升级 | `[["pkg-a", "pkg-b"]]` |
+| `ignore` | 忽略的包，不发布也不管版本 | `["app", "docs"]` |
+| `access` | 发布访问级别 | `"public"` 或 `"restricted"` |
+| `baseBranch` | 主分支名 | `"main"` |
+| `changelog` | Changelog 生成器 | `"@changesets/cli/changelog"` |
+| `commit` | 版本更新是否自动提交 | `true` 或 `false` |
+| `updateInternalDependencies` | 内部依赖如何升级 | `"patch"` |
+
+#### 发布流程
+
+```bash
+# 1. 创建 changeset（交互式）
+pnpm changeset
+
+# 2. 更新版本号（根据 changeset 文件）
+pnpm changeset version
+
+# 3. 构建并发布
+pnpm release
+```
+
+#### 注意事项
+
+- `app` 包设置为 `ignore`，不会发布到 npm
+- `components` 和 `utils` 包使用 `fixed` 绑定，版本始终同步
+
 ## 使用命令
 
 ```bash

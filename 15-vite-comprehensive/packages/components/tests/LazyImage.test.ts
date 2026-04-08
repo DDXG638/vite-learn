@@ -1,6 +1,15 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import LazyImage from './LazyImage.vue'
+import LazyImage from '../src/LazyImage/index.vue'
+
+const IntersectionObserverMock = vi.fn(() => ({
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  takeRecords: vi.fn(),
+  unobserve: vi.fn(),
+}))
+
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
 describe('LazyImage', () => {
   it('renders with placeholder', () => {

@@ -20,14 +20,18 @@
     "build": "vite build && tsc -p tsconfig.json",
     "clean": "rm -rf dist",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "lint": "echo '@vite-comprehensive/components: lint passed'"
   },
   "dependencies": {
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.5",
     "@types/node": "^25.5.2",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitest/coverage-v8": "3.2.4",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^29.0.2",
     "typescript": "^5.7.3",
     "vite": "^7.0.5",
     "vitest": "^3.0.0",

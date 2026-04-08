@@ -15,9 +15,9 @@
     "test:components": "pnpm --filter @vite-comprehensive/components test",
     "test:utils": "pnpm --filter @vite-comprehensive/utils test",
     "lint": "pnpm -r lint",
-    "coverage": "pnpm -r test -- --coverage",
-    "coverage:components": "pnpm --filter @vite-comprehensive/components test --coverage",
-    "coverage:utils": "pnpm --filter @vite-comprehensive/utils test --coverage",
+    "coverage": "pnpm -r coverage",
+    "coverage:components": "pnpm --filter @vite-comprehensive/components coverage",
+    "coverage:utils": "pnpm --filter @vite-comprehensive/utils coverage",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && changeset publish"

@@ -1,1 +1,1 @@
-export { default as LazyImage } from './LazyImage.vue'
+export { LazyImage } from './LazyImage'

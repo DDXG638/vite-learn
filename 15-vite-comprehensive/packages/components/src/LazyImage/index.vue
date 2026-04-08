@@ -87,7 +87,6 @@ watch(() => props.src, () => {
   showError.value = false
 })
 </script>
-
 <style scoped lang="scss">
 .lazy-image {
   position: relative;

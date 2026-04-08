@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import { createRouter } from './router'
 import { ssrDataCache, setSsrData } from './stores/product'
+import '@vite-comprehensive/components/style.css'
 import './styles/main.scss'
 
 export function createApp() {

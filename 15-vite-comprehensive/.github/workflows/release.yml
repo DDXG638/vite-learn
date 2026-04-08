@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type (patch/minor/major)'
+        required: true
+        default: 'patch'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    # 仅在 main 分支上运行
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: pnpm install --frozen-lockfile
+
+      # 创建 changeset
+      - name: Create changeset
+        run: |
+          echo "::set-output name=version::"
+          pnpm changeset version
+
+      # 发布到 npm
+      - name: Publish to npm
+        run: pnpm release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

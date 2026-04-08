@@ -213,6 +213,58 @@ pnpm release
 - `app` 包设置为 `ignore`，不会发布到 npm
 - `components` 和 `utils` 包使用 `fixed` 绑定，版本始终同步
 
+### 8. 测试覆盖率配置
+
+使用 Vitest 内置的 coverage 功能：
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['node_modules/', 'dist/', '**/*.test.ts']
+    }
+  }
+})
+```
+
+运行覆盖率测试：
+
+```bash
+# 所有包
+pnpm coverage
+
+# 指定包
+pnpm coverage:components
+pnpm coverage:utils
+```
+
+### 9. CI/CD 集成
+
+使用 GitHub Actions 实现自动化流程：
+
+#### CI Workflow (ci.yml)
+
+- **Lint** - 代码风格检查
+- **Test** - 单元测试
+- **Build** - 构建验证
+- **Coverage** - 测试覆盖率
+
+#### Release Workflow (release.yml)
+
+- 手动触发发布流程
+- 创建 changeset 版本更新
+- 发布到 npm
+
+```yaml
+# 本地发布流程
+pnpm changeset        # 创建 changeset
+pnpm changeset version # 更新版本
+pnpm release          # 构建并发布
+```
+
 ## 使用命令
 
 ```bash
@@ -245,6 +297,11 @@ pnpm ssr:start
 pnpm test
 pnpm test:components
 pnpm test:utils
+
+# 测试覆盖率
+pnpm coverage
+pnpm coverage:components
+pnpm coverage:utils
 
 # 清理构建产物
 pnpm clean

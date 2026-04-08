@@ -81,6 +81,11 @@ export default defineConfig({
 
 ### server/index.js (生产服务器)
 
+参考：
+
+- [vite-plugin-vue](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/src/entry-server.js)
+- [create-vite-extra](https://github.com/bluwy/create-vite-extra/blob/master/template-ssr-vue-ts/server.js)
+
 ```javascript
 import express from 'express'
 import { resolve, dirname } from 'path'

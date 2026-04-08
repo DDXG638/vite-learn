@@ -245,25 +245,122 @@ pnpm coverage:utils
 
 使用 GitHub Actions 实现自动化流程：
 
+#### 工作流文件结构
+
+```
+.github/workflows/
+├── ci.yml      # 持续集成
+└── release.yml # 发布流程
+```
+
 #### CI Workflow (ci.yml)
 
-- **Lint** - 代码风格检查
-- **Test** - 单元测试
-- **Build** - 构建验证
-- **Coverage** - 测试覆盖率
+```yaml
+name: CI                    # 工作流名称
+
+on:
+  push:
+    branches: [main]        # push 到 main 触发
+  pull_request:
+    branches: [main]         # PR 到 main 触发
+
+jobs:
+  lint:                      # Job ID
+    name: Lint              # 显示名称
+    runs-on: ubuntu-latest  # 运行环境
+
+    steps:
+      - uses: actions/checkout@v4    # 检出代码
+      - uses: pnpm/action-setup@v4   # 安装 pnpm
+        with:
+          version: 9
+      - uses: actions/setup-node@v4   # 安装 Node.js
+        with:
+          node-version: 20
+          cache: 'pnpm'              # 缓存依赖
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  test:
+    strategy:
+      matrix:
+        package: [components, utils]  # 构建矩阵
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ...
+      - run: pnpm --filter @vite-comprehensive/${{ matrix.package }} test
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ...
+      - run: pnpm --filter @vite-comprehensive/${{ matrix.package }} test --coverage
+      - uses: actions/upload-artifact@v4  # 上传产物
+        with:
+          name: coverage-${{ matrix.package }}
+          path: packages/${{ matrix.package }}/coverage/
+```
 
 #### Release Workflow (release.yml)
 
-- 手动触发发布流程
-- 创建 changeset 版本更新
-- 发布到 npm
-
 ```yaml
-# 本地发布流程
-pnpm changeset        # 创建 changeset
-pnpm changeset version # 更新版本
-pnpm release          # 构建并发布
+name: Release
+
+on:
+  workflow_dispatch:        # 手动触发
+    inputs:
+      version:
+        description: 'Version type'
+        required: true
+        default: 'patch'
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'  # 仅 main 分支
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'  # npm 注册表
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm changeset version
+      - run: pnpm release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # 密钥
 ```
+
+#### 常用语法
+
+| 语法 | 说明 |
+|------|------|
+| `on.push.branches` | 分支 push 时触发 |
+| `on.pull_request` | PR 时触发 |
+| `on.workflow_dispatch` | 手动触发 |
+| `runs-on` | 运行环境 |
+| `uses` | 使用 Action |
+| `run` | 执行命令 |
+| `with` | Action 参数 |
+| `env` | 环境变量 |
+| `secrets.XXX` | 密钥变量 |
+| `matrix` | 构建矩阵 |
+| `if` | 条件执行 |
+
+#### 常用 Action
+
+| Action | 用途 |
+|--------|------|
+| `actions/checkout@v4` | 检出代码 |
+| `actions/setup-node@v4` | 安装 Node.js |
+| `actions/upload-artifact@v4` | 上传产物 |
+| `actions/download-artifact@v4` | 下载产物 |
+| `pnpm/action-setup@v4` | 安装 pnpm |
+
+#### 官方文档
+
+- [GitHub Actions 文档](https://docs.github.com/zh/actions)
+- [Workflow 语法](https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions#workflow-syntax)
+- [Action 市场](https://github.com/marketplace?type=actions)
 
 ## 使用命令
 
